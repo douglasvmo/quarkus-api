@@ -1,7 +1,6 @@
 package org.acme.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -9,7 +8,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "Users")
-public class User extends PanacheEntityBase {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -33,6 +32,9 @@ public class User extends PanacheEntityBase {
     private String payload;
 
     private byte[] access;
+
+    @Column(length = 20)
+    private String phone;
 
     public Long getId() {
         return id;

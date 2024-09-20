@@ -1,10 +1,12 @@
 package org.acme.controller;
 
-import io.vertx.ext.auth.impl.jose.JWT;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
 
+@Path("/authorization")
 public class AuthorizationController {
 
-
+    @GET
     private String generateToken(){
         return  "";
     }
