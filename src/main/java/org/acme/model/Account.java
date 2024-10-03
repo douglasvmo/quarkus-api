@@ -7,8 +7,7 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name = "Users")
-public class User {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -31,7 +30,7 @@ public class User {
     @Column(length = 10)
     private String payload;
 
-    private byte[] access;
+    private byte[] access = new byte[5];
 
     @Column(length = 20)
     private String phone;

@@ -1,13 +1,16 @@
 package org.acme.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.acme.model.User;
+import jakarta.ws.rs.core.SecurityContext;
+import org.acme.model.Account;
 import org.acme.repository.UserRepository;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,14 +32,14 @@ public class UserController {
 
     @GET()
     public Response listUser() {
-        List<User> users = repository.listAll();
+        List<Account> users = repository.listAll();
         return Response.ok(users).build();
     }
 
     @POST()
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(Person userToSave) {
-        User user = new User();
+        Account user = new Account();
         user.setUuid(UUID.randomUUID());
         user.setName(userToSave.name);
         user.setEmail(userToSave.email);
@@ -50,7 +53,7 @@ public class UserController {
     @Path("/{uuid}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(UUID uuid, Person person) {
-        User user = repository.findByUUId(uuid);
+        Account user = repository.findByUUId(uuid);
 
         if (user == null) {
             throw new NotFoundException();
