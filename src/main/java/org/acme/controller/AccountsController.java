@@ -4,19 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.SecurityContext;
 import org.acme.model.Account;
-import org.acme.repository.UserRepository;
-import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.acme.repository.AccountRepository;
+import org.acme.service.PasswordService;
 
 import java.util.List;
 import java.util.UUID;
 
-@Path("/users")
-public class UserController {
+@Path("/accounts")
+public class AccountsController {
 
     public static class Person {
         @JsonProperty
@@ -28,9 +26,13 @@ public class UserController {
     }
 
     @Inject
-    UserRepository repository;
+    AccountRepository repository;
+
+    @Inject
+    PasswordService passwordService;
 
     @GET()
+    @RolesAllowed("ADMIN")
     public Response listUser() {
         List<Account> users = repository.listAll();
         return Response.ok(users).build();
@@ -43,7 +45,8 @@ public class UserController {
         user.setUuid(UUID.randomUUID());
         user.setName(userToSave.name);
         user.setEmail(userToSave.email);
-        user.setPassword(userToSave.password);
+        user.setPassword(passwordService.hash(userToSave.password));
+
         repository.persist(user);
 
         return Response.ok(user).build();

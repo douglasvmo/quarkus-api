@@ -30,7 +30,7 @@ public class Account {
     @Column(length = 10)
     private String payload;
 
-    private byte[] access = new byte[5];
+    private byte access;
 
     @Column(length = 20)
     private String phone;
@@ -79,4 +79,11 @@ public class Account {
         this.payload = payload;
     }
 
+    public byte getAccess(){
+        return access;
+    }
+
+    public void setAccess(byte access) {
+        this.access = access;
+    }
 }

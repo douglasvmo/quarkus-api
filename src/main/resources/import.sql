@@ -1,0 +1,2 @@
+INSERT INTO account (uuid, name, password, email, access) VALUES ('b01c47c4-0c2c-45fe-93e6-702e43854fb2', 'admin', '$2a$10$bEMpZz8hMEU4DK3keGVC3e2c8Gl8JH1bFxyMqX7fLhRrXwNqkCQn.', 'test@test.com', 15);
+INSERT INTO account (uuid, name, password, email, access) VALUES ('6ed07f49-a4e0-4c95-86fc-60126d5bd67f', 'usr2', '$2a$10$bEMpZz8hMEU4DK3keGVC3e2c8Gl8JH1bFxyMqX7fLhRrXwNqkCQn.', 'test@test2.com', 1); --

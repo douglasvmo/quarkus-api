@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Transactional
 @ApplicationScoped
-public class UserRepository implements PanacheRepository<Account> {
+public class AccountRepository implements PanacheRepository<Account> {
     public Account findByUUId(UUID uuid) {
         return find("uuid = :uuid", Parameters.with("uuid", uuid)).firstResult();
     }
@@ -20,6 +20,6 @@ public class UserRepository implements PanacheRepository<Account> {
     }
 
     public Account findByEmail(String email) {
-        return find("email = :email", Parameters.with("email", email)).firstResult();
+        return find("email = ?1", email).firstResult();
     }
 }
