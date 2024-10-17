@@ -3,6 +3,7 @@ package org.acme.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -31,6 +32,10 @@ public class Account {
     private String payload;
 
     private byte access;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "patient_id")
+    private List<Appointment> appointments;
 
     @Column(length = 20)
     private String phone;

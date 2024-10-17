@@ -10,19 +10,27 @@ import org.acme.model.Account;
 import org.acme.repository.AccountRepository;
 import org.acme.service.PasswordService;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Path("/accounts")
 public class AccountsController {
 
-    public static class Person {
+    public static class NewAccount {
         @JsonProperty
         String name;
         @JsonProperty
         String email;
         @JsonProperty
         String password;
+    }
+
+    public static class UpdateAccount {
+        Optional<String> name;
+        Optional<String> email;
+        Optional<String> password;
     }
 
     @Inject
@@ -40,12 +48,12 @@ public class AccountsController {
 
     @POST()
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createUser(Person userToSave) {
+    public Response createUser(NewAccount body) {
         Account user = new Account();
         user.setUuid(UUID.randomUUID());
-        user.setName(userToSave.name);
-        user.setEmail(userToSave.email);
-        user.setPassword(passwordService.hash(userToSave.password));
+        user.setName(body.name);
+        user.setEmail(body.email);
+        user.setPassword(passwordService.hash(body.password));
 
         repository.persist(user);
 
@@ -55,16 +63,16 @@ public class AccountsController {
     @PUT
     @Path("/{uuid}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(UUID uuid, Person person) {
+    public Response update(UUID uuid, UpdateAccount body) {
         Account user = repository.findByUUId(uuid);
 
         if (user == null) {
             throw new NotFoundException();
         }
 
-        user.setName(person.name);
-        user.setEmail(person.email);
-        user.setPassword(person.password);
+        body.name.ifPresent(user::setName);
+        body.email.ifPresent(user::setEmail);
+        body.password.ifPresent(pwd -> user.setPassword(passwordService.hash(pwd)));
         repository.persist(user);
 
         return Response.ok(user).build();
